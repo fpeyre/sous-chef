@@ -1056,6 +1056,13 @@ class ClientNotesView(generic.DetailView):
         return context
 
 
+def clientMealsPrefsAsJSON(request, pk):
+    # Display detail of one client
+    client = get_object_or_404(Client, pk=pk)
+    prefs = client.get_meals_prefs()
+    return JsonResponse(prefs)
+
+
 def note_add(request):
     if request.method == "POST":
         form = NoteForm(request.POST)

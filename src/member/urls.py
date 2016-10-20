@@ -22,6 +22,7 @@ from member.views import (
     ClientUpdateAddressInformation,
     ClientUpdateReferentInformation,
     ClientUpdateDietaryRestriction,
+    clientMealsPrefsAsJSON,
 )
 
 from member.forms import (
@@ -77,6 +78,9 @@ urlpatterns = [
         DeleteIngredientToAvoid.as_view(), name='ingredient_to_avoid_delete'),
     url(_(r'^component_to_avoid/(?P<pk>\d+)/delete/$'),
         DeleteComponentToAvoid.as_view(), name='component_to_avoid_delete'),
+
+    url(r'^client/(?P<pk>\d+)/meals/preferences$',
+        clientMealsPrefsAsJSON, name='client_meals_pref'),
 
 ]
 
