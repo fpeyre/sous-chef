@@ -286,6 +286,17 @@ class ClientUpdateDietaryRestriction(generic.edit.FormView):
                     initial['size_' + day] = meals_default[1]
             day_count += 1
 
+        prefs = client.get_meals_prefs()
+        if (bool(prefs)):
+            initial['size_default'] = prefs['maindish_s']
+            initial['main_dish_default_quantity'] = prefs['maindish_q']
+            initial['dessert_default_quantity'] = prefs['dst_q']
+            initial['diabetic_default_quantity'] = prefs['diabdst_q']
+            initial['fruit_salad_default_quantity'] = prefs['fruitsld_q']
+            initial['green_salad_default_quantity'] = prefs['greensld_q']
+            initial['pudding_default_quantity'] = prefs['pudding_q']
+            initial['compote_default_quantity'] = prefs['compot_q']
+
         return initial
 
     def form_valid(self, form):
@@ -309,6 +320,9 @@ class ClientUpdateDietaryRestriction(generic.edit.FormView):
         client.set_meals_schedule(
             form['meals_schedule']
         )
+
+        # Save episodic prefs form client
+        client.set_meals_prefs(form)
 
         # Save restricted items
         client.restrictions.clear()
@@ -640,6 +654,9 @@ class ClientWizard(NamedUrlSessionWizardView):
 
     def save_preferences(self, client):
         preferences = self.form_dict['dietary_restriction'].cleaned_data
+
+        # Save episodic datas
+        client.set_meals_prefs(preferences)
 
         # Save meals schedule as a Client option
         client.set_meals_schedule(
